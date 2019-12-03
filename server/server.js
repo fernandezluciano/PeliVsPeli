@@ -2,7 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const controlador = require('./controllers/listarCompetenciasController.js');
+const controller = require('./controllers/controller.js');
+
 const app = express();
 
 app.use(cors());
@@ -13,7 +14,8 @@ app.use(bodyParser.json());
 
 
 // Pedidos GET para cada ruta. //
-app.get('/competencias', controlador.listarCompetencias);
+app.get('/competencias', controller.listarCompetencias);
+app.get('/competencias/:id/peliculas', controller.obtenerOpciones);
 
 
 // Seteamos el puerto en el cual la aplicación va a escuchar los pedidos. //
