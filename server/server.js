@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 app.get('/competencias', controller.listarCompetencias);
 app.get('/competencias/:id/peliculas', controller.obtenerOpciones);
 
+// Pedidos POST para cada ruta. //
+app.post('/competencias/:id/voto', controller.guardarVotos);
 
 // Seteamos el puerto en el cual la aplicación va a escuchar los pedidos. //
 const puerto = '8080';
