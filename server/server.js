@@ -2,7 +2,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const controller = require('./controllers/controller.js');
+const contListar = require('./controllers/listarCompController.js');
+const contObtOpc = require('./controllers/obtenerOpcionesController.js');
+const contGuardarVotos = require('./controllers/guardarVotosController.js');
+const contObtRes = require('./controllers/obtenerResultadosController.js');
 
 const app = express();
 
@@ -14,11 +17,12 @@ app.use(bodyParser.json());
 
 
 // Pedidos GET para cada ruta. //
-app.get('/competencias', controller.listarCompetencias);
-app.get('/competencias/:id/peliculas', controller.obtenerOpciones);
+app.get('/competencias', contListar.listarCompetencias);
+app.get('/competencias/:id/peliculas', contObtOpc.obtenerOpciones);
+app.get('/competencias/:id/resultados', contObtRes.obtenerResultados);
 
 // Pedidos POST para cada ruta. //
-app.post('/competencias/:id/voto', controller.guardarVotos);
+app.post('/competencias/:id/voto', contGuardarVotos.guardarVotos);
 
 // Seteamos el puerto en el cual la aplicación va a escuchar los pedidos. //
 const puerto = '8080';
