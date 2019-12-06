@@ -114,7 +114,6 @@ CREATE TABLE `competencia` (
 DROP TABLE IF EXISTS voto;
 CREATE TABLE `voto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cantidad` int(11),
   `pelicula_id` int(11) unsigned NOT NULL,
   `competencia_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
