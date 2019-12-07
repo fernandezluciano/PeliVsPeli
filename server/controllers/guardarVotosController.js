@@ -16,7 +16,7 @@ const guardarVotos = (req, res) => {
             res.status(500).send("Hubo un error en la consulta.")
         };
         
-        // Si no hay ninguún error, se envïa la respuesta al pedido. //
+        // Si no hay ninguún error, se envía la respuesta al pedido. //
         res.send(JSON.stringify(resultado));
     })
 };
