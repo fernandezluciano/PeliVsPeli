@@ -15,7 +15,6 @@ const contObtDirectores = require('./controllers/obtenerDirectoresController.js'
 const contElimComp = require('./controllers/eliminarCompController.js');
 const contEditarComp = require('./controllers/editarCompController.js');
 
-
 const app = express();
 
 app.use(cors());
@@ -23,7 +22,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-
 
 // Pedidos GET para cada ruta. //
 app.get('/competencias', contListar.listarCompetencias);
