@@ -1,35 +1,39 @@
 const con = require('../lib/dbconnection.js');
 
 const obtenerOpciones = (req, res) => {
-    let idCompetencia = req.params.id;  
-    let sql = `SELECT * FROM competencia WHERE id = ${idCompetencia}`; // Query para obtener la competencia que se corresponda con el id requerido. //
+    let idCompetencia = req.params.id;
 
-    con.query(sql, (error, resultadoCompetencia, fields) => {
-        // Se chequea que exista una competencia con el id pasado por parámetro. //
-        if(resultadoCompetencia.length == 0){
-            console.log("La competencia indicada no existe.");
-            return res.status(404).send("La competencia indicada no existe.");
+    let sql = `SELECT nombre, genero_id, director_id, actor_id FROM competencia WHERE id = ${idCompetencia};`;
+
+    con.query(sql, function(error, resultadoCompetencia, fields){
+      if (error){
+        console.log("Hubo un error en la consulta", error.message);
+        return res.status(500).send("Hubo un error en la consulta");
+      }
+
+      let queryPeliculas = "SELECT DISTINCT pelicula.id, poster, titulo, genero_id FROM pelicula LEFT JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id LEFT JOIN director_pelicula ON pelicula.id = director_pelicula.pelicula_id WHERE 1=1";
+      let genero = resultadoCompetencia[0].genero_id;
+      let actor = resultadoCompetencia[0].actor_id;
+      let director = resultadoCompetencia[0].director_id;
+      let queryGenero = genero ? ` AND pelicula.genero_id = ${genero}` : '';
+      let queryActor = actor ? ` AND actor_pelicula.actor_id = ${actor}` : '';
+      let queryDirector = director ? ` AND director_pelicula.director_id = ${director}` : '';
+      let randomOrder = ` ORDER BY RAND() LIMIT 2;`;
+
+      let sql2 = queryPeliculas + queryGenero + queryActor + queryDirector + randomOrder;
+
+      con.query(sql2, function(error, peliculas, fields){
+        if (error){
+          console.log("Hubo un error en la consulta", error.message);
+          return res.status(500).send("Hubo un error en la consulta");
+        }
+        let response = {
+          peliculas: peliculas,
+          competencia: resultadoCompetencia[0].nombre
         };
-        if(error){
-            console.log("Hubo un error en la consulta.", error.message);
-            return res.status(500).send("Hubo un error en la consulta.");
-        };
 
-        let sqlPeliculas = `SELECT id, titulo, poster FROM pelicula ORDER BY RAND() LIMIT 2;`; // Query para obtener dos películas al azar. //
-
-        // Se realiza la consulta. //
-        con.query(sqlPeliculas, (error, resultado, fields) => {
-            if(error){
-                console.log("Hubo un error en la consulta.", error.message);
-                return res.status(500).send("Hubo un error en la consulta.");
-            } else { // Si no hay ningún error, se crea el objeto respuesta. //
-                let response = {
-                    competencia: resultadoCompetencia[0].nombre, // Se agrega al objeto respuesta el nombre de la competencia seleccionada por id. //
-                    peliculas: resultado
-                };
-                res.send(JSON.stringify(response));
-            };
-        });
+        res.send(JSON.stringify(response));
+      });
     });
 };
 

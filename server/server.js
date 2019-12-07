@@ -3,11 +3,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const contListar = require('./controllers/listarCompetenciasController.js');
+const contObtCompPorId = require('./controllers/obtenerCompetenciaPorId');
 const contObtOpc = require('./controllers/obtenerOpcionesController.js');
 const contGuardarVotos = require('./controllers/guardarVotosController.js');
 const contObtRes = require('./controllers/obtenerResultadosController.js');
 const contCrearComp = require('./controllers/crearCompController.js');
 const contElimVotos = require('./controllers/eliminarVotosController.js');
+const contObtGeneros = require('./controllers/obtenerGenerosController.js');
+const contObtActores = require('./controllers/obtenerActoresController.js');
+const contObtDirectores = require('./controllers/obtenerDirectoresController.js');
+
 
 const app = express();
 
@@ -20,8 +25,13 @@ app.use(bodyParser.json());
 
 // Pedidos GET para cada ruta. //
 app.get('/competencias', contListar.listarCompetencias);
+app.get('/competencias/:id', contObtCompPorId.obtenerCompetenciaPorId);
 app.get('/competencias/:id/peliculas', contObtOpc.obtenerOpciones);
 app.get('/competencias/:id/resultados', contObtRes.obtenerResultados);
+app.get('/generos', contObtGeneros.obtenerGeneros);
+app.get('/actores', contObtActores.obtenerActores);
+app.get('/directores', contObtDirectores.obtenerDirectores);
+
 
 // Pedidos POST para cada ruta. //
 app.post('/competencias/:id/voto', contGuardarVotos.guardarVotos);
